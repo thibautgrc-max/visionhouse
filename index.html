@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Builder Command OS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="bg-grid"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">B</div>
+      <div>
+        <div class="eyebrow">Live Commerce Stack</div>
+        <h1>Builder Command OS</h1>
+      </div>
+    </div>
+
+    <nav class="topnav">
+      <a href="#catalogue">Produits</a>
+      <a href="#checkout">Commande</a>
+      <a href="admin.html">Back-office</a>
+    </nav>
+  </header>
+
+  <main class="shell">
+    <section class="hero card">
+      <div class="hero-copy">
+        <span class="pill">TikTok • Snap • Live • DM closing</span>
+        <h2>Commande rapide, paiement propre, point relais, bordereau prêt.</h2>
+        <p>
+          Architecture pensée pour convertir vite, centraliser les commandes et industrialiser la logistique.
+        </p>
+
+        <div class="hero-kpis">
+          <div class="kpi">
+            <strong id="kpiOrders">0</strong>
+            <span>commandes locales</span>
+          </div>
+          <div class="kpi">
+            <strong id="kpiRevenue">0 €</strong>
+            <span>CA estimé</span>
+          </div>
+          <div class="kpi">
+            <strong>3</strong>
+            <span>modes de livraison</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-panel">
+        <div class="stack-preview">
+          <div class="stack-row"><span>Live</span><span>Réf produit</span></div>
+          <div class="stack-row"><span>Formulaire</span><span>Adresse</span></div>
+          <div class="stack-row"><span>Paiement</span><span>Stripe</span></div>
+          <div class="stack-row"><span>Relais</span><span>Mondial Relay</span></div>
+          <div class="stack-row"><span>Back-office</span><span>Bordereaux</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="layout">
+      <section class="left-col">
+        <section id="catalogue" class="card">
+          <div class="section-head">
+            <div>
+              <div class="eyebrow">Catalogue live</div>
+              <h3>Références rapides</h3>
+            </div>
+            <span class="pill subtle">Déstockage / Précommande</span>
+          </div>
+
+          <div id="productGrid" class="product-grid"></div>
+        </section>
+
+        <section id="checkout" class="card">
+          <div class="section-head">
+            <div>
+              <div class="eyebrow">Tunnel client</div>
+              <h3>Commande</h3>
+            </div>
+            <span class="pill subtle">Friction minimale</span>
+          </div>
+
+          <form id="orderForm" class="form-grid">
+            <div class="field">
+              <label for="customerName">Nom complet</label>
+              <input id="customerName" name="customerName" placeholder="Jean Dupont" required />
+            </div>
+
+            <div class="field">
+              <label for="customerEmail">Email</label>
+              <input id="customerEmail" name="customerEmail" type="email" placeholder="client@email.com" required />
+            </div>
+
+            <div class="field">
+              <label for="customerPhone">Téléphone</label>
+              <input id="customerPhone" name="customerPhone" placeholder="06 00 00 00 00" required />
+            </div>
+
+            <div class="field">
+              <label for="reference">Référence produit</label>
+              <input id="reference" name="reference" placeholder="QZ01" required />
+            </div>
+
+            <div class="field">
+              <label for="quantity">Quantité</label>
+              <input id="quantity" name="quantity" type="number" min="1" value="1" required />
+            </div>
+
+            <div class="field">
+              <label for="mode">Mode d'achat</label>
+              <select id="mode" name="mode">
+                <option value="instock">Stock immédiat</option>
+                <option value="preorder">Précommande</option>
+                <option value="deposit">Réservation avec acompte</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="shippingMethod">Livraison</label>
+              <select id="shippingMethod" name="shippingMethod">
+                <option value="mondialrelay">Mondial Relay</option>
+                <option value="chronopost">Chronopost Domicile</option>
+                <option value="colissimo">Colissimo Domicile</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="address1">Adresse</label>
+              <input id="address1" name="address1" placeholder="12 rue Exemple" required />
+            </div>
+
+            <div class="field">
+              <label for="address2">Complément</label>
+              <input id="address2" name="address2" placeholder="Appartement, bâtiment..." />
+            </div>
+
+            <div class="field">
+              <label for="postalCode">Code postal</label>
+              <input id="postalCode" name="postalCode" placeholder="34000" required />
+            </div>
+
+            <div class="field">
+              <label for="city">Ville</label>
+              <input id="city" name="city" placeholder="Montpellier" required />
+            </div>
+
+            <div class="field full">
+              <label for="notes">Notes client</label>
+              <textarea id="notes" name="notes" rows="4" placeholder="Taille, couleur, indication de préparation..."></textarea>
+            </div>
+
+            <div id="relayPanel" class="full relay-panel">
+              <div class="relay-head">
+                <div>
+                  <div class="eyebrow">Point relais</div>
+                  <h4>Recherche par localisation</h4>
+                </div>
+                <button id="findRelayBtn" type="button" class="btn btn-secondary">Rechercher</button>
+              </div>
+
+              <div id="relayStatus" class="hint">
+                Entre une adresse et un code postal, puis lance la recherche.
+              </div>
+
+              <div id="relayResults" class="relay-list"></div>
+            </div>
+
+            <div class="full order-actions">
+              <button type="button" id="saveDraftBtn" class="btn btn-secondary">Sauvegarder en brouillon</button>
+              <button type="submit" class="btn btn-primary">Créer la commande</button>
+            </div>
+          </form>
+        </section>
+      </section>
+
+      <aside class="right-col">
+        <section class="card sticky">
+          <div class="section-head">
+            <div>
+              <div class="eyebrow">Résumé</div>
+              <h3>Commande active</h3>
+            </div>
+          </div>
+
+          <div id="summary" class="summary empty">
+            <p>Aucune commande générée.</p>
+          </div>
+
+          <div class="separator"></div>
+
+          <div class="ops-list">
+            <div class="ops-item">
+              <span>Pipeline</span>
+              <strong>Commande → Paiement → Bordereau</strong>
+            </div>
+            <div class="ops-item">
+              <span>Email</span>
+              <strong>Confirmation + suivi</strong>
+            </div>
+            <div class="ops-item">
+              <span>Scalabilité</span>
+              <strong>GitHub + Vercel</strong>
+            </div>
+          </div>
+        </section>
+      </aside>
+    </section>
+  </main>
+
+  <template id="productCardTemplate">
+    <article class="product-card">
+      <div class="product-code"></div>
+      <div class="product-body">
+        <h4></h4>
+        <p></p>
+        <div class="product-meta">
+          <span class="price"></span>
+          <span class="stock"></span>
+        </div>
+      </div>
+      <button class="btn btn-ghost" type="button">Sélectionner</button>
+    </article>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
