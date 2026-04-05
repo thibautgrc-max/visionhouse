@@ -105,7 +105,7 @@
           <div class="sn-line" id="snLine3"></div>
           <div class="sn-item" id="sn4" data-step="4">
             <span class="sn-num">4</span>
-            <span class="sn-label">Paiement</span>
+            <span class="sn-label">Validation</span>
           </div>
         </div>
 
@@ -156,7 +156,7 @@
             <!-- Urgency strip (shown when product recognized) -->
             <div class="urgency-strip" id="urgencyStrip" hidden>
               <span class="urg-pulse"></span>
-              <span id="urgencyText">12 personnes regardent ce produit</span>
+              <span id="urgencyText">Réservation en attente</span>
             </div>
 
             <div class="field">
@@ -164,28 +164,28 @@
               <div class="input-wrap">
                 <input id="reference" name="reference" type="text"
                   class="inp inp--ref"
-                  placeholder="Ex : QZ01, DR02 ou description libre…"
+                  placeholder="Entrez la réference que vous souhaitez EX : JP4M OU 1CD42"
                   required autocomplete="off" spellcheck="false" />
                 <span class="inp-icon" id="refIcon"></span>
               </div>
-              <span class="field-hint" id="refHint">Référence vue en live. Toute description acceptée.</span>
+              <span class="field-hint" id="refHint">Référence vue en live ou vente privé accepté.</span>
               <span class="field-err" id="referenceError"></span>
             </div>
 
             <div class="field" id="customPriceField" hidden>
-              <label class="field-label" for="prix_unitaire">Prix unitaire <span class="req">*</span> <em class="field-sublabel">— annoncé en live</em></label>
+              <label class="field-label" for="prix_unitaire">Prix unitaire <span class="req">*</span> <em class="field-sublabel">— annoncé en live ou sur vente privé</em></label>
               <div class="input-wrap input-wrap--price">
                 <span class="price-pre">€</span>
                 <input id="prix_unitaire" name="prix_unitaire" type="number"
                   class="inp inp--price"
-                  placeholder="0.00" min="0" step="0.01" />
+                  placeholder="Saisissez le prix indiqué de votre article" min="0" step="0.01" />
               </div>
               <span class="field-err" id="prix_unitaireError"></span>
             </div>
 
             <div class="row-2">
               <div class="field">
-                <label class="field-label" for="quantite">Quantité</label>
+                <label class="field-label" for="quantite">Quantité limitée selon disponibilité</label>
                 <div class="qty-wrap">
                   <button type="button" class="qty-btn" id="qtyMinus" aria-label="Diminuer">−</button>
                   <input id="quantite" name="quantite" type="number"
@@ -194,14 +194,14 @@
                 </div>
               </div>
               <div class="field">
-                <label class="field-label" for="pseudo">Pseudo TikTok / Snap <span class="opt">(optionnel)</span></label>
+                <label class="field-label" for="pseudo">Pseudo TikTok / Snap <span class="opt">(recommandé)</span></label>
                 <input id="pseudo" name="pseudo" type="text"
-                  class="inp" placeholder="@votre_pseudo" />
+                  class="inp" placeholder="Permet de recevoir des vidéos de votre livraison" />
               </div>
             </div>
 
             <button type="button" class="step-next" id="step1Next">
-              Continuer
+              Valider ma demande
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </button>
           </div>
