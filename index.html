@@ -1,0 +1,616 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LiveOrder — Commande Express</title>
+  <meta name="description" content="Commande express sécurisée. Remplissez en 60 secondes, payez en un clic via Stripe." />
+  <meta name="theme-color" content="#07070f" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════
+       TOPBAR
+  ═══════════════════════════════════════════ -->
+  <header class="topbar" id="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-brand">
+        <span class="topbar-logo">LO</span>
+        <span class="topbar-name">LiveOrder</span>
+      </div>
+      <div class="topbar-live">
+        <span class="live-dot"></span>
+        <span class="live-label">Live en cours</span>
+        <span class="live-count" id="liveCount">· <span id="liveViewers">142</span> en ligne</span>
+      </div>
+      <button class="reset-btn" id="resetAllBtn" type="button" aria-label="Réinitialiser le formulaire" title="Nouvelle commande">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+      </button>
+    </div>
+
+    <!-- Barre de progression -->
+    <div class="progress-bar-wrapper">
+      <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════════════════
+       HERO
+  ═══════════════════════════════════════════ -->
+  <section class="hero">
+    <div class="hero-bg-mesh"></div>
+    <div class="hero-inner">
+      <div class="hero-kicker">
+        <span class="kicker-dot"></span>
+        Commande sécurisée · Paiement Stripe
+      </div>
+      <h1 class="hero-h1">
+        <em>Votre produit,</em><br>
+        livré en quelques jours.
+      </h1>
+      <p class="hero-sub">
+        Remplissez le formulaire en 60&nbsp;secondes.
+        Confirmation immédiate par email.
+      </p>
+
+      <div class="trust-pills">
+        <div class="trust-pill"><span class="tp-icon">🛡</span>Paiement sécurisé</div>
+        <div class="trust-pill"><span class="tp-icon">⚡</span>Confirmation instantanée</div>
+        <div class="trust-pill"><span class="tp-icon">✦</span>Vendeur certifié</div>
+        <div class="trust-pill"><span class="tp-icon">📦</span>Suivi inclus</div>
+      </div>
+
+      <div class="social-proof-hero">
+        <div class="sph-orders">
+          <span class="sph-dot"></span>
+          <strong id="heroOrderCount">38</strong> commandes passées aujourd'hui
+        </div>
+        <div class="sph-sep">·</div>
+        <div class="sph-rating">★★★★★ <span>Vendeur de confiance</span></div>
+      </div>
+
+      <a href="#order-form" class="hero-cta">
+        Commander maintenant
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       TRUST BAR
+  ═══════════════════════════════════════════ -->
+  <div class="trust-bar">
+    <div class="trust-bar-inner">
+      <div class="tbar-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        SSL sécurisé
+      </div>
+      <div class="tbar-sep">·</div>
+      <div class="tbar-item">💳 Visa / Mastercard</div>
+      <div class="tbar-sep">·</div>
+      <div class="tbar-item">📬 Email de confirmation</div>
+      <div class="tbar-sep">·</div>
+      <div class="tbar-item">⚡ Traitement sous 24h</div>
+      <div class="tbar-sep">·</div>
+      <div class="tbar-item">✅ Vendeur vérifié</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       COMMENT ÇA MARCHE (compact)
+  ═══════════════════════════════════════════ -->
+  <section class="how-section">
+    <div class="how-inner">
+      <div class="section-label">3 étapes simples</div>
+      <h2 class="how-title">Simple. Rapide. Sécurisé.</h2>
+      <div class="steps-grid">
+        <div class="step">
+          <div class="step-num">01</div>
+          <h3>Remplissez</h3>
+          <p>Référence + coordonnées en moins d'une minute.</p>
+        </div>
+        <div class="step-connector">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <h3>Payez</h3>
+          <p>100&nbsp;% sécurisé via Stripe. Zéro donnée bancaire stockée.</p>
+        </div>
+        <div class="step-connector">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <h3>Recevez</h3>
+          <p>Confirmation email immédiate. Livraison rapide à votre porte.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       FORMULAIRE + SIDEBAR
+  ═══════════════════════════════════════════ -->
+  <main class="form-layout" id="order-form">
+
+    <!-- ─── FORMULAIRE PRINCIPAL ─── -->
+    <section class="form-panel">
+
+      <!-- ─── ÉTAT SUCCÈS ─── -->
+      <div class="success-state" id="successState" hidden>
+        <div class="success-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <h2>Commande reçue&nbsp;!</h2>
+        <p>Parfait — votre commande a bien été enregistrée. Vous allez recevoir un email de confirmation. Finalisez maintenant le paiement via Stripe.</p>
+        <a id="successStripeLink" class="cta-btn cta-btn--success" href="https://buy.stripe.com/TON_LIEN_STRIPE" target="_blank" rel="noopener noreferrer">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          Payer maintenant via Stripe
+        </a>
+        <p class="success-sub">Vous serez redirigé vers notre page de paiement sécurisée Stripe.</p>
+      </div>
+
+      <form id="orderForm" novalidate>
+        <!-- Champs cachés pour Formspree -->
+        <input type="hidden" name="_subject"          value="🛍 Nouvelle commande LiveOrder" />
+        <input type="hidden" name="montant_produit"   id="hiddenAmount"        value="0.00" />
+        <input type="hidden" name="quantite"          id="hiddenQuantity"      value="1" />
+        <input type="hidden" name="montant_livraison" id="hiddenShipping"      value="6.00" />
+        <input type="hidden" name="montant_total"     id="hiddenTotal"         value="6.00" />
+        <input type="hidden" name="service_livraison" id="hiddenShippingLabel" value="Relais Standard" />
+        <input type="hidden" name="mode_paiement"     id="hiddenPaymentMode"   value="stripe" />
+
+        <!-- ═══════════════════════════════
+             ÉTAPE 1 — PRODUIT
+        ═══════════════════════════════ -->
+        <div class="form-step" data-step="1">
+          <div class="step-header">
+            <div class="step-badge">Étape 1 · Votre produit</div>
+            <h2 class="step-title">Quel produit souhaitez-vous&nbsp;?</h2>
+            <p class="step-desc">Entrez la référence annoncée lors du live ou décrivez librement votre article.</p>
+          </div>
+
+          <!-- Carte montant dynamique -->
+          <div class="amount-card" id="amountCard">
+            <div class="amount-card-left">
+              <div class="amount-label">Montant produit</div>
+              <div class="amount-value-wrapper">
+                <span id="amountDisplay" class="amount-number">—</span>
+                <span id="amountCurrency" class="amount-currency"></span>
+              </div>
+              <div class="amount-hint" id="amountHint">Entrez votre référence ci-dessous</div>
+            </div>
+            <div class="amount-card-right" id="amountCardRight">
+              <div class="amount-qty-label">Qté</div>
+              <div class="amount-qty-value" id="amountQtyDisplay">×1</div>
+            </div>
+          </div>
+
+          <div class="field-group">
+
+            <!-- Référence -->
+            <div class="field">
+              <label for="reference" class="field-label">
+                Référence produit
+                <span class="required">*</span>
+              </label>
+              <div class="input-wrapper">
+                <input id="reference" name="reference" class="input input--ref" type="text"
+                  placeholder="Ex : QZ01, DR02 ou description libre…"
+                  required autocomplete="off" spellcheck="false" />
+                <span class="input-status-icon" id="refIcon"></span>
+              </div>
+              <div class="field-hint" id="refHint">Saisissez la référence vue en live. Toute description est acceptée.</div>
+              <div class="field-error" id="referenceError"></div>
+            </div>
+
+            <!-- Prix libre (affiché si ref inconnue) -->
+            <div class="field" id="customPriceField" hidden>
+              <label for="prix_unitaire" class="field-label">
+                Prix unitaire
+                <span class="required">*</span>
+                <span class="field-label-sub">— annoncé lors du live</span>
+              </label>
+              <div class="input-wrapper input-wrapper--price">
+                <span class="price-prefix">€</span>
+                <input id="prix_unitaire" name="prix_unitaire" class="input input--price" type="number"
+                  placeholder="0.00" min="0" step="0.01" />
+              </div>
+              <div class="field-hint">Entrez le prix annoncé lors du live ou du post.</div>
+              <div class="field-error" id="prix_unitaireError"></div>
+            </div>
+
+            <!-- Quantité + Pseudo en ligne -->
+            <div class="row-2">
+              <div class="field">
+                <label for="quantite" class="field-label">Quantité</label>
+                <div class="qty-stepper">
+                  <button type="button" class="qty-btn" id="qtyMinus" aria-label="Diminuer">−</button>
+                  <input id="quantite" name="quantite" class="input input--qty" type="number"
+                    value="1" min="1" max="99" readonly />
+                  <button type="button" class="qty-btn" id="qtyPlus" aria-label="Augmenter">+</button>
+                </div>
+              </div>
+              <div class="field">
+                <label for="pseudo" class="field-label">Pseudo Snap / TikTok <span class="optional">(optionnel)</span></label>
+                <input id="pseudo" name="pseudo" class="input" type="text" placeholder="@votre_pseudo" />
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ═══════════════════════════════
+             ÉTAPE 2 — COORDONNÉES
+        ═══════════════════════════════ -->
+        <div class="form-step" data-step="2">
+          <div class="step-header">
+            <div class="step-badge">Étape 2 · Coordonnées</div>
+            <h2 class="step-title">Vos informations personnelles</h2>
+            <p class="step-desc">Pour préparer et expédier votre commande.</p>
+          </div>
+
+          <div class="field-group">
+            <div class="row-2">
+              <div class="field">
+                <label for="prenom" class="field-label">Prénom <span class="required">*</span></label>
+                <input id="prenom" name="prenom" class="input" type="text"
+                  placeholder="Marie" required autocomplete="given-name" />
+                <div class="field-error" id="prenomError"></div>
+              </div>
+              <div class="field">
+                <label for="nom" class="field-label">Nom <span class="required">*</span></label>
+                <input id="nom" name="nom" class="input" type="text"
+                  placeholder="Dupont" required autocomplete="family-name" />
+                <div class="field-error" id="nomError"></div>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="email" class="field-label">Email <span class="required">*</span></label>
+              <input id="email" name="email" class="input" type="email"
+                placeholder="marie@email.com" required autocomplete="email" />
+              <div class="field-hint">Votre confirmation de commande sera envoyée à cette adresse.</div>
+              <div class="field-error" id="emailError"></div>
+            </div>
+
+            <div class="field">
+              <label for="telephone" class="field-label">Téléphone <span class="required">*</span></label>
+              <input id="telephone" name="telephone" class="input" type="tel"
+                placeholder="06 00 00 00 00" required autocomplete="tel" />
+              <div class="field-error" id="telephoneError"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══════════════════════════════
+             ÉTAPE 3 — ADRESSE
+        ═══════════════════════════════ -->
+        <div class="form-step" data-step="3">
+          <div class="step-header">
+            <div class="step-badge">Étape 3 · Adresse</div>
+            <h2 class="step-title">Adresse de livraison</h2>
+            <p class="step-desc">Où souhaitez-vous recevoir votre commande&nbsp;?</p>
+          </div>
+
+          <div class="field-group">
+            <div class="field">
+              <label for="adresse1" class="field-label">Adresse <span class="required">*</span></label>
+              <input id="adresse1" name="adresse1" class="input" type="text"
+                placeholder="12 rue de la Paix" required autocomplete="address-line1" />
+              <div class="field-error" id="adresse1Error"></div>
+            </div>
+
+            <div class="field">
+              <label for="adresse2" class="field-label">Complément <span class="optional">(optionnel)</span></label>
+              <input id="adresse2" name="adresse2" class="input" type="text"
+                placeholder="Appartement, bâtiment, étage…" autocomplete="address-line2" />
+            </div>
+
+            <div class="row-2">
+              <div class="field">
+                <label for="ville" class="field-label">Ville <span class="required">*</span></label>
+                <input id="ville" name="ville" class="input" type="text"
+                  placeholder="Paris" required autocomplete="address-level2" />
+                <div class="field-error" id="villeError"></div>
+              </div>
+              <div class="field">
+                <label for="code_postal" class="field-label">Code postal <span class="required">*</span></label>
+                <input id="code_postal" name="code_postal" class="input" type="text"
+                  placeholder="75001" required autocomplete="postal-code" inputmode="numeric" />
+                <div class="field-error" id="code_postalError"></div>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="pays" class="field-label">Pays</label>
+              <div class="select-wrapper">
+                <select id="pays" name="pays" class="input select-input" autocomplete="country-name">
+                  <option value="France">🇫🇷 France</option>
+                  <option value="Belgique">🇧🇪 Belgique</option>
+                  <option value="Luxembourg">🇱🇺 Luxembourg</option>
+                  <option value="Suisse">🇨🇭 Suisse</option>
+                </select>
+                <span class="select-arrow">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </span>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="notes" class="field-label">Notes <span class="optional">(optionnel)</span></label>
+              <textarea id="notes" name="notes" class="input textarea"
+                placeholder="Couleur, taille, précision de livraison, message particulier…"></textarea>
+              <div class="field-hint">Toute information utile pour la préparation de votre commande.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══════════════════════════════
+             ÉTAPE 4 — LIVRAISON
+        ═══════════════════════════════ -->
+        <div class="form-step" data-step="4">
+          <div class="step-header">
+            <div class="step-badge">Étape 4 · Livraison</div>
+            <h2 class="step-title">Mode de livraison</h2>
+            <p class="step-desc">Choisissez votre option de livraison préférée.</p>
+          </div>
+
+          <div class="shipping-options" id="shippingOptions">
+            <button type="button" class="shipping-card active"
+              data-shipping-price="6.00" data-shipping-label="Relais Standard">
+              <div class="sc-radio"></div>
+              <div class="sc-icon">🏪</div>
+              <div class="sc-info">
+                <strong>Relais Standard</strong>
+                <span>Point relais — 3 à 5 jours ouvrés</span>
+              </div>
+              <div class="sc-price">6,00&nbsp;€</div>
+            </button>
+
+            <button type="button" class="shipping-card"
+              data-shipping-price="6.90" data-shipping-label="Relais Express">
+              <div class="sc-radio"></div>
+              <div class="sc-icon">⚡</div>
+              <div class="sc-info">
+                <strong>Relais Express</strong>
+                <span>Point relais prioritaire — 2 jours</span>
+              </div>
+              <div class="sc-price">6,90&nbsp;€</div>
+            </button>
+
+            <button type="button" class="shipping-card"
+              data-shipping-price="8.90" data-shipping-label="Domicile Premium">
+              <div class="sc-radio"></div>
+              <div class="sc-icon">🏠</div>
+              <div class="sc-info">
+                <strong>Domicile Premium</strong>
+                <span>Livraison à votre porte — 2 à 3 jours</span>
+              </div>
+              <div class="sc-price">8,90&nbsp;€</div>
+            </button>
+          </div>
+
+          <div class="field" id="relaisField">
+            <label for="point_relais" class="field-label">Point relais préféré <span class="optional">(optionnel)</span></label>
+            <div class="select-wrapper">
+              <select id="point_relais" name="point_relais" class="input select-input">
+                <option value="">Sélectionner un point relais</option>
+                <option>Relais centre-ville</option>
+                <option>Locker gare</option>
+                <option>Commerce express</option>
+              </select>
+              <span class="select-arrow">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══════════════════════════════
+             ÉTAPE 5 — PAIEMENT
+        ═══════════════════════════════ -->
+        <div class="form-step" data-step="5">
+          <div class="step-header">
+            <div class="step-badge">Étape 5 · Paiement</div>
+            <h2 class="step-title">Mode de paiement</h2>
+            <p class="step-desc">Sécurisé, rapide, sans surprise.</p>
+          </div>
+
+          <div class="payment-options" id="paymentOptions">
+            <button type="button" class="payment-card active" data-payment-mode="stripe">
+              <div class="pc-check">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div class="pc-icon">💳</div>
+              <div class="pc-info">
+                <strong>Carte bancaire</strong>
+                <span>Visa, Mastercard — via Stripe</span>
+              </div>
+              <div class="pc-badge">Recommandé</div>
+            </button>
+
+            <button type="button" class="payment-card" data-payment-mode="manual">
+              <div class="pc-check">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div class="pc-icon">📝</div>
+              <div class="pc-info">
+                <strong>Validation manuelle</strong>
+                <span>Vous serez contacté pour finaliser</span>
+              </div>
+            </button>
+          </div>
+
+          <div class="security-row">
+            <div class="sec-badge">🔒 SSL</div>
+            <div class="sec-badge">🛡 Stripe PCI</div>
+            <div class="sec-badge">✅ Crypté</div>
+            <div class="sec-badge">🏦 3D Secure</div>
+          </div>
+        </div>
+
+        <!-- ═══════════════════════════════
+             CTA FINAL
+        ═══════════════════════════════ -->
+        <div class="form-cta-zone">
+          <div class="cta-reassurance">
+            <span>🔒 Données protégées</span>
+            <span class="cta-sep">·</span>
+            <span>📧 Confirmation email immédiate</span>
+            <span class="cta-sep">·</span>
+            <span>⚡ Traitement sous 24h</span>
+          </div>
+
+          <button type="submit" class="cta-btn cta-btn--primary" id="submitBtn">
+            <span class="cta-shimmer"></span>
+            <span class="cta-btn-text">Valider ma commande</span>
+            <svg class="cta-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+
+          <a id="stripePaymentLink" class="stripe-direct-link"
+            href="https://buy.stripe.com/TON_LIEN_STRIPE" target="_blank" rel="noopener noreferrer">
+            <span>💳</span>
+            <span>Payer directement via Stripe sans formulaire</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+
+          <p class="cta-legal">
+            En validant, vous acceptez les conditions générales de vente.
+            Aucune donnée bancaire n'est stockée sur nos serveurs.
+          </p>
+        </div>
+      </form>
+    </section>
+
+    <!-- ─── SIDEBAR ─── -->
+    <aside class="sidebar" id="sidebar">
+
+      <!-- Récapitulatif -->
+      <div class="summary-card">
+        <div class="summary-header">
+          <span class="summary-kicker">Récapitulatif</span>
+          <h3 class="summary-title">Votre commande</h3>
+        </div>
+
+        <div class="summary-product" id="summaryProductBlock">
+          <div class="sp-icon">🛍</div>
+          <div class="sp-info">
+            <span class="sp-ref" id="summaryRef">—</span>
+            <span class="sp-name" id="summaryName">Entrez une référence</span>
+          </div>
+          <div class="sp-qty" id="summaryQty" hidden>×1</div>
+        </div>
+
+        <div class="summary-lines">
+          <div class="summary-line">
+            <span>Produit</span>
+            <strong id="summaryAmount">—</strong>
+          </div>
+          <div class="summary-line" id="summaryShippingLine">
+            <span>Livraison</span>
+            <strong id="summaryShipping">6,00&nbsp;€</strong>
+          </div>
+          <div class="summary-line summary-total">
+            <span>Total</span>
+            <strong id="summaryTotal">—</strong>
+          </div>
+        </div>
+
+        <div class="summary-mode">
+          <span class="sm-icon">💳</span>
+          <span class="sm-value" id="summaryPaymentMode">Carte bancaire (Stripe)</span>
+        </div>
+
+        <a id="sidebarStripeLink" class="sidebar-cta"
+          href="https://buy.stripe.com/TON_LIEN_STRIPE" target="_blank" rel="noopener noreferrer">
+          Payer maintenant
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+      </div>
+
+      <!-- Réassurance -->
+      <div class="reassurance-card">
+        <h4>Pourquoi acheter ici&nbsp;?</h4>
+        <ul class="reassurance-list">
+          <li>
+            <span class="rl-icon">🛡</span>
+            <div>
+              <strong>Paiement sécurisé</strong>
+              <span>SSL + Stripe certifié PCI DSS</span>
+            </div>
+          </li>
+          <li>
+            <span class="rl-icon">📧</span>
+            <div>
+              <strong>Confirmation immédiate</strong>
+              <span>Email dès validation de commande</span>
+            </div>
+          </li>
+          <li>
+            <span class="rl-icon">⚡</span>
+            <div>
+              <strong>Traitement rapide</strong>
+              <span>Commande préparée sous 24h ouvrées</span>
+            </div>
+          </li>
+          <li>
+            <span class="rl-icon">✅</span>
+            <div>
+              <strong>Vendeur certifié</strong>
+              <span>Compte vérifié, avis clients positifs</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Urgence live -->
+      <div class="urgency-card">
+        <div class="urg-dot"></div>
+        <div class="urg-text">
+          <strong>Live en cours</strong>
+          <span>Commandez maintenant pour bénéficier des prix annoncés en direct.</span>
+        </div>
+      </div>
+
+    </aside>
+  </main>
+
+  <!-- ═══════════════════════════════════════════
+       MOBILE BOTTOM BAR (sticky)
+  ═══════════════════════════════════════════ -->
+  <div class="mobile-bottom-bar" id="mobileBottomBar">
+    <div class="mbb-total">
+      <span class="mbb-label">Total</span>
+      <span class="mbb-amount" id="mbbTotal">—</span>
+    </div>
+    <a href="#order-form" class="mbb-cta" id="mbbCta">Commander →</a>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="footer-logo">LO</span>
+        <span>LiveOrder</span>
+      </div>
+      <div class="footer-links">
+        <span>Paiement sécurisé via Stripe</span>
+        <span>·</span>
+        <span>Données protégées SSL</span>
+        <span>·</span>
+        <span>© 2025 LiveOrder</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
