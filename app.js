@@ -103,7 +103,7 @@ function updateMobileBar(step = state.currentStep) {
     1: 'Continuer →',
     2: 'Continuer →',
     3: 'Continuer →',
-    4: 'Payer maintenant →'
+    4: 'Payer →'
   };
   btn.textContent = labels[step] || 'Commander →';
   btn.setAttribute('aria-label', labels[step] || 'Commander');
@@ -165,7 +165,7 @@ function render() {
   }
 
   if ($id('urgencyText') && hasProduct) {
-    $id('urgencyText').textContent = `${state.productRef || 'Article'} — réservation active`;
+    $id('urgencyText').textContent = `${state.productRef || 'Article'} — article prêt à être confirmé`;
   }
 
   const pairs = {
@@ -181,7 +181,7 @@ function render() {
     sbShipping: fmt.euro(CONFIG.shipping.price),
     sbTotal: hasProduct ? fmt.euro(state.total) : '—',
 
-    mbbRef: hasProduct ? state.productRef : '',
+    mbbRef: hasProduct ? state.productRef : 'Récapitulatif',
 
     hiddenAmount: state.productPrice.toFixed(2),
     hiddenQuantity: String(state.quantity),
@@ -231,10 +231,8 @@ function goToStep(n) {
   for (let i = 1; i <= 4; i++) {
     const item = $id(`sn${i}`);
     if (!item) continue;
-
     item.classList.remove('active', 'done');
     item.removeAttribute('aria-current');
-
     if (i === n) {
       item.classList.add('active');
       item.setAttribute('aria-current', 'step');
@@ -247,6 +245,7 @@ function goToStep(n) {
     $id(`snLine${i}`)?.classList.toggle('filled', i < n);
   }
 
+  document.dispatchEvent(new CustomEvent('close-mobile-sheet'));
   updateMobileBar(n);
 }
 
@@ -376,7 +375,7 @@ function handleReference() {
     }
 
     if (hint) {
-      hint.textContent = `Référence reconnue — ${product.name}`;
+      hint.textContent = `Article détecté — ${product.name}`;
       hint.style.color = 'var(--green)';
     }
 
@@ -394,7 +393,7 @@ function handleReference() {
     }
 
     if (hint) {
-      hint.textContent = 'Référence libre — entrez le prix ci-dessous.';
+      hint.textContent = 'Référence libre — entrez le prix annoncé pour continuer.';
       hint.style.color = '';
     }
 
@@ -412,7 +411,7 @@ function handleReference() {
     }
 
     if (hint) {
-      hint.textContent = 'Référence vue en live ou vente privée.';
+      hint.textContent = 'Référence vue en live ou en vente privée.';
       hint.style.color = '';
     }
 
@@ -571,25 +570,37 @@ function initMobileSummarySheet() {
   if (!trigger || !sheet || !backdrop) return;
 
   const close = () => {
-    backdrop.hidden = true;
-    sheet.hidden = true;
-    sheet.setAttribute('aria-hidden', 'true');
+    if (sheet.hidden) return;
+    sheet.classList.remove('is-open');
+    backdrop.classList.remove('is-open');
     trigger.setAttribute('aria-expanded', 'false');
+    sheet.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
+    setTimeout(() => {
+      if (!sheet.classList.contains('is-open')) {
+        sheet.hidden = true;
+        backdrop.hidden = true;
+      }
+    }, 240);
   };
 
   const open = () => {
     updateSummarySheet();
     backdrop.hidden = false;
     sheet.hidden = false;
-    sheet.setAttribute('aria-hidden', 'false');
+    requestAnimationFrame(() => {
+      backdrop.classList.add('is-open');
+      sheet.classList.add('is-open');
+    });
     trigger.setAttribute('aria-expanded', 'true');
+    sheet.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
   };
 
   trigger.addEventListener('click', open);
   closeBtn?.addEventListener('click', close);
   backdrop.addEventListener('click', close);
+  document.addEventListener('close-mobile-sheet', close);
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && !sheet.hidden) close();
@@ -684,8 +695,16 @@ function initKeyboardNav() {
 }
 
 function syncStripeLink() {
-  const link = $id('sidebarStripeLink');
-  if (link) link.href = CONFIG.stripeLink;
+  ['sidebarStripeLink'].forEach((id) => {
+    const link = $id(id);
+    if (link) link.href = CONFIG.stripeLink;
+  });
+}
+
+function smoothStepFocus(step, focusId) {
+  const target = $id(`step${step}`);
+  target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  if (focusId) setTimeout(() => $id(focusId)?.focus({ preventScroll: true }), 260);
 }
 
 function initEvents() {
@@ -703,20 +722,20 @@ function initEvents() {
     if (!validateStep(1)) return;
     renderStep1Summary();
     goToStep(2);
-    setTimeout(() => $id('prenom')?.focus(), 250);
+    smoothStepFocus(2, 'prenom');
   });
 
   $id('step2Next')?.addEventListener('click', () => {
     if (!validateStep(2)) return;
     renderStep2Summary();
     goToStep(3);
-    setTimeout(() => $id('adresse1')?.focus(), 250);
+    smoothStepFocus(3, 'adresse1');
   });
 
   $id('step3Next')?.addEventListener('click', () => {
     if (!validateStep(3)) return;
     goToStep(4);
-    setTimeout(() => $id('submitBtn')?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 250);
+    smoothStepFocus(4, 'submitBtn');
   });
 
   $id('mbbCta')?.addEventListener('click', () => {
@@ -742,7 +761,7 @@ function initEvents() {
 
     btn?.classList.add('loading');
     btn?.setAttribute('disabled', 'disabled');
-    if (txt) txt.textContent = 'Redirection vers Stripe…';
+    if (txt) txt.textContent = 'Ouverture de Stripe…';
 
     document.querySelector('.submit-err')?.remove();
 
