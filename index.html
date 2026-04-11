@@ -20,7 +20,8 @@
     <div class="topbar-inner">
       <div class="topbar-brand" aria-label="VisionHouse">
         <span class="brand-mark" aria-hidden="true">LO</span>
-        <span class="brand-name">VisionHouse.fr</span>
+        <span class="brand-name">VisionHouse™ – Accès aux offres
+</span>
       </div>
       <div class="topbar-live" id="topbarLive" role="status" aria-live="polite" aria-label="Indicateur en direct">
         <span class="live-dot" aria-hidden="true"></span>
@@ -130,7 +131,7 @@
         <form id="orderForm" method="POST" action="#" novalidate aria-label="Formulaire de commande">
           <!-- ⚙ CONFIG : modifiez uniquement app.js → CONFIG -->
           <!-- Hidden fields Formspree -->
-          <input type="hidden" name="_subject"          value="🛍 Nouvelle commande Les Colibris" />
+          <input type="hidden" name="_subject"          value="🛍 Nouvelle commande VisionHouse" />
           <input type="hidden" name="intent_id"         id="hiddenIntentId"     value="" />
           <input type="hidden" name="montant_produit"   id="hiddenAmount"       value="0.00" />
           <input type="hidden" name="quantite"          id="hiddenQuantity"     value="1" />
@@ -167,11 +168,11 @@
             </div>
 
             <div class="field">
-              <label class="field-label" for="reference">Référence produit <span class="req" aria-label="obligatoire">*</span></label>
+              <label class="field-label" for="reference">Référence Article <span class="req" aria-label="obligatoire">*</span></label>
               <div class="input-wrap">
                 <input id="reference" name="reference" type="text"
                   class="inp inp--ref"
-                  placeholder="Entrez la référence souhaitée, ex. : JP4M ou 1CD42"
+                  placeholder="Entrez votre référence souhaitée
                   required autocomplete="off" spellcheck="false"
                   aria-describedby="refHint referenceError" />
                 <span class="inp-icon" id="refIcon" aria-hidden="true"></span>
@@ -194,7 +195,7 @@
 
             <div class="row-2">
               <div class="field">
-                <label class="field-label" for="quantite">Quantité limitée selon disponibilité</label>
+                <label class="field-label" for="quantite">Stock limitée selon disponibilité</label>
                 <div class="qty-wrap" role="group" aria-label="Sélecteur de quantité">
                   <button type="button" class="qty-btn" id="qtyMinus" aria-label="Diminuer la quantité">−</button>
                   <input id="quantite" name="quantite" type="number"
@@ -204,9 +205,9 @@
                 </div>
               </div>
               <div class="field">
-                <label class="field-label" for="pseudo">Pseudo TikTok / Snap <span class="opt">(recommandé)</span></label>
+                <label class="field-label" for="pseudo">Pseudo TikTok / Snapchat <span class="opt">(recommandé)</span></label>
                 <input id="pseudo" name="pseudo" type="text"
-                  class="inp" placeholder="Pour recevoir des vidéos de votre livraison"
+                  class="inp" placeholder="Reçois les images privé de l'expédition"
                   autocomplete="username" />
               </div>
             </div>
@@ -335,7 +336,7 @@
                       <option value="France">🇫🇷 France</option>
                       <option value="Belgique">🇧🇪 Belgique</option>
                       <option value="Luxembourg">🇱🇺 Luxembourg</option>
-                      <option value="Suisse">🇨🇭 Suisse</option>
+                      <option value="Espagne">🇪🇸 Espagne</option>
                     </select>
                     <span class="select-chevron" aria-hidden="true">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
@@ -349,7 +350,7 @@
                 <div class="delivery-panel-head">
                   <span class="delivery-panel-kicker">Livraison</span>
                   <h3 class="delivery-panel-title" id="deliveryModeHeading">Choisissez votre mode de livraison</h3>
-                  <p class="delivery-panel-sub">Expédition sous 24–48h après confirmation du paiement. Numéro de suivi envoyé par email et SMS.</p>
+                  <p class="delivery-panel-sub">Expédition sous 24h après confirmation du paiement. Numéro de suivi envoyé par email et SMS.</p>
                 </div>
 
                 <!-- ── Grille de choix transporteur ── -->
@@ -366,7 +367,7 @@
                     </span>
                     <span class="delivery-mode-copy">
                       <span class="delivery-mode-title">Point Relais <span class="delivery-mode-carrier-name">Mondial Relay</span></span>
-                      <span class="delivery-mode-text">Retrait dans un point relais près de chez vous. Le relais adapté est confirmé par email après validation.</span>
+                      <span class="delivery-mode-text">Retrait dans un point relais près de chez vous.</span>
                     </span>
                     <span class="delivery-mode-meta">
                       <span class="delivery-mode-price">4,99&nbsp;€</span>
@@ -374,22 +375,22 @@
                     </span>
                   </button>
 
-                  <!-- Chronopost — Domicile J+1 -->
+                  <!-- Chronopost -->
                   <button class="delivery-mode-card" id="dmcChronopost"
-                    data-mode="chronopost" data-price="8.99" data-label="Chronopost — Domicile J+1"
+                    data-mode="chronopost" data-price="8.50" data-label="Chronopost — Express"
                     type="button" role="radio" aria-checked="false"
-                    aria-label="Chronopost Domicile — 8,99 €, livraison J+1 avant 13h">
+                    aria-label="Chronopost — 8,50 €, livraison express">
                     <span class="delivery-mode-badge delivery-mode-badge--dark" aria-hidden="true">Le plus rapide</span>
                     <span class="delivery-mode-icon" aria-hidden="true">
                       <img src="Chronopost_idjZPOpPAO_0.svg" alt="Chronopost" class="delivery-mode-carrier-img delivery-mode-carrier-img--cp" loading="eager" />
                     </span>
                     <span class="delivery-mode-copy">
-                      <span class="delivery-mode-title">Domicile prioritaire <span class="delivery-mode-carrier-name">Chronopost</span></span>
-                      <span class="delivery-mode-text">Livraison express à votre adresse le lendemain avant 13h. Remise en main propre, signature incluse.</span>
+                      <span class="delivery-mode-title">Express prioritaire <span class="delivery-mode-carrier-name">Chronopost</span></span>
+                      <span class="delivery-mode-text">Livraison express. Remise en main propre, signature incluse.</span>
                     </span>
                     <span class="delivery-mode-meta">
-                      <span class="delivery-mode-price">8,99&nbsp;€</span>
-                      <span class="delivery-mode-delay">J+1 avant 13h</span>
+                      <span class="delivery-mode-price">8,50 &nbsp;€</span>
+                      <span class="delivery-mode-delay">Express</span>
                     </span>
                   </button>
 
@@ -407,7 +408,7 @@
                 <div class="delivery-trust-strip" role="complementary" aria-label="Garanties de livraison">
                   <div class="dts-item">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
-                    Expédition sous 24–48h
+                    Expédition sous 24h
                   </div>
                   <span class="dts-sep" aria-hidden="true"></span>
                   <div class="dts-item">
@@ -432,14 +433,14 @@
                 aria-label="Notes supplémentaires optionnelles"></textarea>
             </div>
 
-            <button type="button" class="step-next js-ripple" id="step3Next" aria-label="Continuer vers le paiement">
-              Continuer vers le paiement
+            <button type="button" class="step-next js-ripple" id="step3Next" aria-label="Continuer">
+              Continuer
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </button>
           </div>
 
           <!-- ────────────── STEP 4 — PAIEMENT ────────────── -->
-          <div class="form-step" id="step4" hidden role="region" aria-label="Étape 4 : Récapitulatif et finalisation du paiement sur Stripe">
+          <div class="form-step" id="step4" hidden role="region" aria-label="Étape 4 : Récapitulatif et finalisation de commande">
 
             <!-- Récap commande complet -->
             <div class="order-recap" id="orderRecap" aria-label="Récapitulatif de votre commande">
@@ -470,26 +471,26 @@
             </div>
 
             <!-- Bloc réassurance paiement Stripe -->
-            <div class="stripe-pay-block" aria-label="Paiement par carte bancaire via Stripe">
+            <div class="stripe-pay-block" aria-label="Paiement sécurisé via Stripe">
               <div class="spb-left">
                 <span class="spb-icon" aria-hidden="true">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                 </span>
                 <div class="spb-copy">
                   <span class="spb-title">Paiement 100&nbsp;% sécurisé</span>
-                  <span class="spb-meta">Visa · Mastercard · 3D&nbsp;Secure · Chiffrement SSL</span>
+                  <span class="spb-meta">Visa · Mastercard · &nbsp;Sécurisé·</span>
                 </div>
               </div>
               <div class="spb-badges" aria-hidden="true">
-                <span class="spb-badge">PCI DSS</span>
-                <span class="spb-badge spb-badge--ssl">SSL</span>
+                <span class="spb-badge"></span>
+                <span class="spb-badge spb-badge--"></span>
                 <span class="spb-badge spb-badge--stripe">Stripe</span>
               </div>
             </div>
 
             <!-- Nudge final -->
             <div class="payment-nudge" role="note">
-              <strong>Dernière étape :</strong> vous allez être redirigé vers Stripe pour saisir vos informations de paiement en toute sécurité. Aucune donnée bancaire ne transite par nos serveurs.
+              <strong>Dernière étape :</strong> vous allez être redirigé vers Stripe pour confirmé la dernière étape avant la livraison.
             </div>
 
             <!-- Bouton principal Stripe — href centralisé dans CONFIG.stripeLink -->
