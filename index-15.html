@@ -1,0 +1,834 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>VisionHouse — Réservation</title>
+  <meta name="description" content="Commande express sécurisée. Remplissez en 60 secondes, payez via Stripe." />
+  <meta name="theme-color" content="#F5F1EB" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- ══ TOPBAR ══════════════════════════════════════════════════════ -->
+  <header class="topbar" id="topbar" role="banner">
+    <div class="topbar-inner">
+      <div class="topbar-brand" aria-label="VisionHouse">
+        <span class="brand-mark" aria-hidden="true">VH</span>
+        <span class="brand-name">VisionHouse™ – Accès aux offres
+</span>
+      </div>
+      <div class="topbar-live" id="topbarLive" role="status" aria-live="polite" aria-label="Indicateur en direct">
+        <span class="live-dot" aria-hidden="true"></span>
+        <span class="live-label">Live</span>
+        <span class="live-sep" aria-hidden="true">·</span>
+        <span id="liveViewers" aria-label="Utilisateurs en ligne">142</span>
+        <span> en ligne</span>
+      </div>
+      <button class="reset-btn" id="resetAllBtn" type="button" aria-label="Nouvelle commande" title="Nouvelle commande">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+      </button>
+    </div>
+    <div class="progress-track" role="progressbar" aria-label="Progression du formulaire" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+      <div class="progress-fill" id="progressBar"></div>
+    </div>
+  </header>
+
+  <!-- ══ HERO ════════════════════════════════════════════════════════ -->
+  <section class="hero" aria-labelledby="heroHeading">
+    <div class="hero-orbs" aria-hidden="true">
+      <span class="hero-orb hero-orb--1"></span>
+      <span class="hero-orb hero-orb--2"></span>
+    </div>
+    <div class="hero-inner">
+      <div class="hero-kicker">
+        <span class="kicker-pulse" aria-hidden="true"></span>
+        Entrez votre référence &nbsp;·
+      </div>
+      <h1 class="hero-h1" id="heroHeading"><em>Réservez votre article</em></h1>
+      <p class="hero-sub">· Votre article est réservé dès validation du paiement</p>
+
+      <div class="hero-trust" role="list" aria-label="Garanties">
+        <span class="htrust-item" role="listitem">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Données protégées
+        </span>
+        <span class="htrust-sep" aria-hidden="true"></span>
+        <span class="htrust-item" role="listitem">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          Paiement 100% sécurisé
+        </span>
+        <span class="htrust-sep" aria-hidden="true"></span>
+        <span class="htrust-item" role="listitem">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          Vendeur certifié · Suivi de commande en temps réel
+        </span>
+      </div>
+
+      <div class="hero-social" role="status" aria-live="polite">
+        <span class="social-pulse" aria-hidden="true"></span>
+        Stock limité — Réservations en cours
+        <span class="social-stars" aria-label="5 étoiles">&nbsp;★★★★★</span>
+      </div>
+
+      <a href="#tunnel" class="hero-cta js-ripple">
+        Je sécurise mon article
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <p class="hero-micro-trust">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        
+      </p>
+    </div>
+  </section>
+
+  <!-- ══ TUNNEL ══════════════════════════════════════════════════════ -->
+  <main class="tunnel-wrap" id="tunnel">
+    <div class="tunnel-layout">
+
+      <!-- ── FORM COLUMN ── -->
+      <div class="tunnel-col">
+
+        <!-- Step breadcrumb -->
+        <nav class="step-nav" id="stepNav" aria-label="Étapes de commande">
+          <div class="sn-item active" id="sn1" data-step="1" aria-current="step" role="button" tabindex="0">
+            <span class="sn-num" aria-hidden="true">
+              <span class="sn-num-inner">1</span>
+              <svg class="sn-check-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+            <span class="sn-label">Produit</span>
+          </div>
+          <div class="sn-line" id="snLine1" aria-hidden="true"></div>
+          <div class="sn-item" id="sn2" data-step="2" role="button" tabindex="-1">
+            <span class="sn-num" aria-hidden="true">
+              <span class="sn-num-inner">2</span>
+              <svg class="sn-check-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+            <span class="sn-label">Infos</span>
+          </div>
+          <div class="sn-line" id="snLine2" aria-hidden="true"></div>
+          <div class="sn-item" id="sn3" data-step="3" role="button" tabindex="-1">
+            <span class="sn-num" aria-hidden="true">
+              <span class="sn-num-inner">3</span>
+              <svg class="sn-check-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+            <span class="sn-label">Adresse</span>
+          </div>
+          <div class="sn-line" id="snLine3" aria-hidden="true"></div>
+          <div class="sn-item" id="sn4" data-step="4" role="button" tabindex="-1">
+            <span class="sn-num" aria-hidden="true">
+              <span class="sn-num-inner">4</span>
+              <svg class="sn-check-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+            <span class="sn-label">Paiement</span>
+          </div>
+        </nav>
+
+        <!-- Bandeau retour Stripe (success / canceled) -->
+        <div id="stripeReturnBanner" hidden role="status" aria-live="polite"></div>
+
+        <form id="orderForm" method="POST" action="https://formspree.io/f/mdayoorr" novalidate aria-label="Formulaire de commande">
+          <!-- ⚙ CONFIG : modifiez uniquement app.js → CONFIG -->
+          <!-- Hidden fields Formspree -->
+          <input type="hidden" name="_subject"          value="🛍 Nouvelle commande VisionHouse™" />
+          <input type="hidden" name="intent_id"         id="hiddenIntentId"     value="" />
+          <input type="hidden" name="montant_produit"   id="hiddenAmount"       value="0.00" />
+          <input type="hidden" name="quantite"          id="hiddenQuantity"     value="1" />
+          <input type="hidden" name="montant_livraison" id="hiddenShipping"     value="4.99" />
+          <input type="hidden" name="montant_total"     id="hiddenTotal"        value="4.99" />
+          <input type="hidden" name="mode_livraison"    id="hiddenDeliveryMode" value="mondial-relay" />
+          <input type="hidden" name="transporteur"      id="hiddenTransporter"  value="Mondial Relay" />
+          <input type="hidden" name="mode_paiement"     id="hiddenPaymentMode"  value="stripe" />
+
+          <!-- ══ CHAMPS DE SUIVI COMMANDE (gérés automatiquement par app.js) ══════
+
+               ┌─────────────────────────────────────────────────────────────┐
+               │  RÉFÉRENCE PRODUIT  ≠  NUMÉRO DE COMMANDE                  │
+               │                                                             │
+               │  reference_produit  = ce que le client a saisi (ex: QZ01)  │
+               │                       → vous sert à préparer l'article     │
+               │                                                             │
+               │  numero_commande    = identifiant administratif unique      │
+               │                       ex: CMD-2026-04-13-154522-A7K2        │
+               │                       → vous sert à suivre / compter       │
+               │                                                             │
+               │  libelle_commande   = étiquette lisible pour vous           │
+               │                       ex: "Commande du 13/04/2026 à 15:45" │
+               └─────────────────────────────────────────────────────────────┘
+
+               STATUTS :
+               - statut_commande   "Client en attente de paiement" → avant Stripe
+                                   "Client payé"                   → après webhook Stripe
+               - statut_logistique ""                              → avant paiement
+                                   "À expédier"                    → après confirmation
+                                   "Bordereau créé"                → après expédition
+          ═══════════════════════════════════════════════════════════════════ -->
+
+          <!-- Référence du PRODUIT commandé — miroir du champ visible saisi par le client -->
+          <input type="hidden" name="reference_produit"  id="hiddenRefProduit"       value="" />
+
+          <!-- Numéro de commande UNIQUE — format CMD-AAAA-MM-JJ-HHMMSS-XXXX -->
+          <input type="hidden" name="numero_commande"    id="hiddenNumeroCommande"   value="" />
+
+          <!-- Libellé lisible de la commande — ex : "Commande du 13/04/2026 à 15:45:22" -->
+          <input type="hidden" name="libelle_commande"   id="hiddenLibelleCommande"  value="" />
+
+          <!-- Statut commande : mis à "Client en attente de paiement" à chaque submit -->
+          <input type="hidden" name="statut_commande"    id="hiddenStatutCommande"   value="Client en attente de paiement" />
+
+          <!-- Statut logistique : vide avant paiement confirmé -->
+          <input type="hidden" name="statut_logistique"  id="hiddenStatutLogistique" value="" />
+
+          <input type="text"   name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+          <!-- ────────────── STEP 1 — PRODUIT ────────────── -->
+          <div class="form-step active" id="step1" role="region" aria-label="Étape 1 : Produit">
+
+            <!-- Dynamic price card -->
+            <div class="price-card" id="amountCard">
+              <div class="pc-left">
+                <span class="pc-label">Montant</span>
+                <div class="pc-amount">
+                  <span id="amountDisplay" class="pc-num" aria-live="polite">—</span>
+                  <span id="amountCurrency" class="pc-curr" aria-hidden="true"></span>
+                </div>
+                <span class="pc-hint" id="amountHint" aria-live="polite">Entrez votre référence</span>
+              </div>
+              <div class="pc-right" id="amountCardRight">
+                <span class="pc-qty-lbl">Qté</span>
+                <span class="pc-qty-val" id="amountQtyDisplay" aria-live="polite">×1</span>
+              </div>
+            </div>
+
+            <!-- Urgency strip (shown when product recognized) -->
+            <div class="urgency-strip" id="urgencyStrip" hidden role="status" aria-live="polite">
+              <span class="urg-pulse" aria-hidden="true"></span>
+              <span id="urgencyText">Réservation en attente</span>
+            </div>
+
+            <div class="field">
+              <label class="field-label" for="reference">Référence Article <span class="req" aria-label="obligatoire">*</span></label>
+              <div class="input-wrap">
+                <input id="reference" name="reference_produit" type="text"
+                  class="inp inp--ref"
+                  placeholder="Entrez votre référence souhaitée"
+                  required autocomplete="off" spellcheck="false"
+                  aria-describedby="refHint referenceError" />
+                <span class="inp-icon" id="refIcon" aria-hidden="true"></span>
+              </div>
+              <span class="field-hint" id="refHint">Référence vue en live ou vente privée acceptée.</span>
+              <span class="field-err" id="referenceError" role="alert" aria-live="polite"></span>
+            </div>
+
+            <div class="field" id="customPriceField" hidden>
+              <label class="field-label" for="prix_unitaire">Prix unitaire <span class="req" aria-label="obligatoire">*</span> <em class="field-sublabel">— annoncé en live ou sur vente privée</em></label>
+              <div class="input-wrap input-wrap--price">
+                <span class="price-pre" aria-hidden="true">€</span>
+                <input id="prix_unitaire" name="prix_unitaire" type="number"
+                  class="inp inp--price"
+                  placeholder="Saisissez le prix indiqué pour votre article" min="0" step="0.01"
+                  aria-describedby="prix_unitaireError" />
+              </div>
+              <span class="field-err" id="prix_unitaireError" role="alert" aria-live="polite"></span>
+            </div>
+
+            <div class="row-2">
+              <div class="field">
+                <label class="field-label" for="quantite">Stock limitée selon disponibilité</label>
+                <div class="qty-wrap" role="group" aria-label="Sélecteur de quantité">
+                  <button type="button" class="qty-btn" id="qtyMinus" aria-label="Diminuer la quantité">−</button>
+                  <input id="quantite" name="quantite" type="number"
+                    class="inp inp--qty" value="1" min="1" max="99" readonly
+                    aria-label="Quantité" />
+                  <button type="button" class="qty-btn" id="qtyPlus" aria-label="Augmenter la quantité">+</button>
+                </div>
+              </div>
+              <div class="field">
+                <label class="field-label" for="pseudo">Pseudo TikTok / Snapchat <span class="opt">(recommandé)</span></label>
+                <input id="pseudo" name="pseudo" type="text"
+                  class="inp" placeholder="Reçois les images privé de l'expédition"
+                  autocomplete="username" />
+              </div>
+            </div>
+
+            <div class="product-confidence" aria-label="Éléments de confiance">
+              <span class="pcf-item">Réservation instantanée</span>
+              <span class="pcf-dot" aria-hidden="true"></span>
+              <span class="pcf-item">Paiement Stripe sécurisé</span>
+              <span class="pcf-dot" aria-hidden="true"></span>
+              <span class="pcf-item">Expédition rapide</span>
+            </div>
+
+            <button type="button" class="step-next js-ripple" id="step1Next" aria-label="Valider ma demande et passer à l'étape suivante">
+              Valider ma demande
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+
+          <!-- ────────────── STEP 2 — COORDONNÉES ────────────── -->
+          <div class="form-step" id="step2" hidden role="region" aria-label="Étape 2 : Coordonnées">
+
+            <div class="step-summary" id="step1Summary" role="status" aria-live="polite">
+              <!-- filled by JS -->
+            </div>
+
+            <div class="row-2">
+              <div class="field">
+                <label class="field-label" for="prenom">Prénom <span class="req" aria-label="obligatoire">*</span></label>
+                <input id="prenom" name="prenom" type="text"
+                  class="inp" placeholder="Marie"
+                  required autocomplete="given-name"
+                  aria-describedby="prenomError" />
+                <span class="field-err" id="prenomError" role="alert" aria-live="polite"></span>
+              </div>
+              <div class="field">
+                <label class="field-label" for="nom">Nom <span class="req" aria-label="obligatoire">*</span></label>
+                <input id="nom" name="nom" type="text"
+                  class="inp" placeholder="Dupont"
+                  required autocomplete="family-name"
+                  aria-describedby="nomError" />
+                <span class="field-err" id="nomError" role="alert" aria-live="polite"></span>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="field-label" for="email">Email <span class="req" aria-label="obligatoire">*</span></label>
+              <input id="email" name="email" type="email"
+                class="inp" placeholder="marie@email.com"
+                required autocomplete="email"
+                aria-describedby="emailHint emailError" />
+              <span class="field-hint" id="emailHint">Confirmation de commande envoyée ici.</span>
+              <span class="field-err" id="emailError" role="alert" aria-live="polite"></span>
+            </div>
+
+            <div class="field">
+              <label class="field-label" for="telephone">Téléphone <span class="req" aria-label="obligatoire">*</span></label>
+              <input id="telephone" name="telephone" type="tel"
+                class="inp" placeholder="06 00 00 00 00"
+                required autocomplete="tel"
+                aria-describedby="telephoneError" />
+              <span class="field-err" id="telephoneError" role="alert" aria-live="polite"></span>
+            </div>
+
+            <button type="button" class="step-next js-ripple" id="step2Next" aria-label="Continuer vers l'étape adresse">
+              Continuer
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+
+          <!-- ────────────── STEP 3 — ADRESSE + LIVRAISON ────────────── -->
+          <div class="form-step" id="step3" hidden role="region" aria-label="Étape 3 : Adresse et mode de livraison">
+
+            <div class="step-summary" id="step2Summary" role="status" aria-live="polite">
+              <!-- filled by JS -->
+            </div>
+
+            <div class="delivery-shell">
+
+              <!-- PANEL ADRESSE -->
+              <section class="delivery-panel delivery-panel--address" aria-labelledby="deliveryAddressHeading">
+                <div class="delivery-panel-head">
+                  <span class="delivery-panel-kicker">Adresse</span>
+                  <h3 class="delivery-panel-title" id="deliveryAddressHeading">Confirmez votre adresse de réception</h3>
+                  <p class="delivery-panel-sub">Utilisée pour l'expédition et pour vous attribuer le point relais le plus proche.</p>
+                </div>
+
+                <div class="field">
+                  <label class="field-label" for="adresse1">Adresse <span class="req" aria-label="obligatoire">*</span></label>
+                  <input id="adresse1" name="adresse1" type="text"
+                    class="inp" placeholder="12 rue de la Paix"
+                    required autocomplete="address-line1"
+                    aria-describedby="adresse1Error" />
+                  <span class="field-err" id="adresse1Error" role="alert" aria-live="polite"></span>
+                </div>
+
+                <div class="field">
+                  <label class="field-label" for="adresse2">Complément <span class="opt">(optionnel)</span></label>
+                  <input id="adresse2" name="adresse2" type="text"
+                    class="inp" placeholder="Appartement, bâtiment, étage…"
+                    autocomplete="address-line2" />
+                </div>
+
+                <div class="row-2 row-2--delivery">
+                  <div class="field">
+                    <label class="field-label" for="code_postal">Code postal <span class="req" aria-label="obligatoire">*</span></label>
+                    <input id="code_postal" name="code_postal" type="text"
+                      class="inp" placeholder="75001"
+                      required autocomplete="postal-code" inputmode="numeric"
+                      aria-describedby="code_postalError" />
+                    <span class="field-err" id="code_postalError" role="alert" aria-live="polite"></span>
+                  </div>
+                  <div class="field">
+                    <label class="field-label" for="ville">Ville <span class="req" aria-label="obligatoire">*</span></label>
+                    <input id="ville" name="ville" type="text"
+                      class="inp" placeholder="Paris"
+                      required autocomplete="address-level2"
+                      aria-describedby="villeError" />
+                    <span class="field-err" id="villeError" role="alert" aria-live="polite"></span>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label class="field-label" for="pays">Pays</label>
+                  <div class="select-wrap">
+                    <select id="pays" name="pays" class="inp inp--select" autocomplete="country-name">
+                      <option value="France">🇫🇷 France</option>
+                      <option value="Belgique">🇧🇪 Belgique</option>
+                      <option value="Luxembourg">🇱🇺 Luxembourg</option>
+                      <option value="Espagne">🇪🇸 Espagne</option>
+                    </select>
+                    <span class="select-chevron" aria-hidden="true">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </span>
+                  </div>
+                </div>
+              </section>
+
+              <!-- ══ PANEL LIVRAISON — Bloc de décision premium ══ -->
+              <section class="delivery-panel delivery-panel--mode" aria-labelledby="deliveryModeHeading">
+                <div class="delivery-panel-head">
+                  <span class="delivery-panel-kicker">Livraison</span>
+                  <h3 class="delivery-panel-title" id="deliveryModeHeading">Choisissez votre mode de livraison</h3>
+                  <p class="delivery-panel-sub">Expédition sous 24h après confirmation du paiement. Numéro de suivi envoyé par email et SMS.</p>
+                </div>
+
+                <!-- ── Grille de choix transporteur ── -->
+                <div class="delivery-mode-grid" role="radiogroup" aria-label="Mode de livraison">
+
+                  <!-- Mondial Relay — Point Relais (sans sélection détaillée) -->
+                  <button class="delivery-mode-card active" id="dmcMondialRelay"
+                    data-mode="mondial-relay" data-price="4.99" data-label="Mondial Relay — Point Relais"
+                    type="button" role="radio" aria-checked="true"
+                    aria-label="Mondial Relay Point Relais — 4,99 €, 3 à 5 jours ouvrés">
+                    <span class="delivery-mode-badge" aria-hidden="true">Le plus choisi</span>
+                    <span class="delivery-mode-icon" aria-hidden="true">
+                      <img src="Mondial_Relay_France_idA8ymq_lt_0.svg" alt="Mondial Relay" class="delivery-mode-carrier-img delivery-mode-carrier-img--mr" loading="eager" />
+                    </span>
+                    <span class="delivery-mode-copy">
+                      <span class="delivery-mode-title">Point Relais <span class="delivery-mode-carrier-name">Mondial Relay</span></span>
+                      <span class="delivery-mode-text">Retrait dans un point relais près de chez vous.</span>
+                    </span>
+                    <span class="delivery-mode-meta">
+                      <span class="delivery-mode-price">4,99&nbsp;€</span>
+                      <span class="delivery-mode-delay">3–5 jours ouvrés</span>
+                    </span>
+                  </button>
+
+                  <!-- Chronopost -->
+                  <button class="delivery-mode-card" id="dmcChronopost"
+                    data-mode="chronopost" data-price="8.99" data-label="Chronopost — Express"
+                    type="button" role="radio" aria-checked="false"
+                    aria-label="Chronopost — 8,99 €, livraison express J+1">
+                    <span class="delivery-mode-badge delivery-mode-badge--dark" aria-hidden="true">Le plus rapide</span>
+                    <span class="delivery-mode-icon" aria-hidden="true">
+                      <img src="Chronopost_idjZPOpPAO_0.svg" alt="Chronopost" class="delivery-mode-carrier-img delivery-mode-carrier-img--cp" loading="eager" />
+                    </span>
+                    <span class="delivery-mode-copy">
+                      <span class="delivery-mode-title">Express prioritaire <span class="delivery-mode-carrier-name">Chronopost</span></span>
+                      <span class="delivery-mode-text">Livraison express. Remise en main propre, signature incluse.</span>
+                    </span>
+                    <span class="delivery-mode-meta">
+                      <span class="delivery-mode-price">8,99&nbsp;€</span>
+                      <span class="delivery-mode-delay">Express</span>
+                    </span>
+                  </button>
+
+                </div><!-- /delivery-mode-grid -->
+
+                <!-- ── Note de réassurance Mondial Relay (sans friction de sélection) ── -->
+                <div class="mr-relay-note" id="mrRelayNote" role="note" aria-live="polite">
+                  <span class="mr-relay-note-icon" aria-hidden="true">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  </span>
+                  <span>Le point relais le plus proche de votre adresse vous sera confirmé par email après validation du paiement.</span>
+                </div>
+
+                <!-- ── Réassurance transporteurs ── -->
+                <div class="delivery-trust-strip" role="complementary" aria-label="Garanties de livraison">
+                  <div class="dts-item">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+                    Expédition sous 24h
+                  </div>
+                  <span class="dts-sep" aria-hidden="true"></span>
+                  <div class="dts-item">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    Suivi email &amp; SMS inclus
+                  </div>
+                  <span class="dts-sep" aria-hidden="true"></span>
+                  <div class="dts-item">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    Livraison après paiement confirmé
+                  </div>
+                </div>
+
+              </section><!-- /delivery-panel--mode -->
+
+            </div><!-- /delivery-shell -->
+
+            <div class="field">
+              <label class="field-label" for="notes">Notes <span class="opt">(optionnel)</span></label>
+              <textarea id="notes" name="notes" class="inp inp--ta"
+                placeholder="Couleur, taille, précision…" rows="2"
+                aria-label="Notes supplémentaires optionnelles"></textarea>
+            </div>
+
+            <button type="button" class="step-next js-ripple" id="step3Next" aria-label="Continuer">
+              Continuer
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+
+          <!-- ────────────── STEP 4 — PAIEMENT ────────────── -->
+          <div class="form-step" id="step4" hidden role="region" aria-label="Étape 4 : Récapitulatif et finalisation de commande">
+
+            <!-- Récap commande complet -->
+            <div class="order-recap" id="orderRecap" aria-label="Récapitulatif de votre commande">
+              <div class="recap-product">
+                <div class="recap-info">
+                  <span class="recap-ref" id="summaryRef">—</span>
+                  <span class="recap-name" id="summaryName">—</span>
+                </div>
+                <span class="recap-qty" id="summaryQty" aria-label="Quantité"></span>
+              </div>
+              <div class="recap-lines" aria-label="Détail de la commande">
+                <div class="recap-line">
+                  <span>Produit</span>
+                  <strong id="summaryAmount" aria-live="polite">—</strong>
+                </div>
+                <div class="recap-line recap-line--delivery-block">
+                  <span>Livraison</span>
+                  <div class="recap-delivery-info">
+                    <strong id="summaryShipping" aria-live="polite">—</strong>
+                    <span class="recap-delivery-label" id="summaryDeliveryLabel" aria-live="polite">—</span>
+                  </div>
+                </div>
+                <div class="recap-line recap-total">
+                  <span>Total TTC</span>
+                  <strong id="summaryTotal" aria-live="polite">—</strong>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bloc réassurance paiement Stripe -->
+            <div class="stripe-pay-block" aria-label="Paiement sécurisé via Stripe">
+              <div class="spb-left">
+                <span class="spb-icon" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                </span>
+                <div class="spb-copy">
+                  <span class="spb-title">Paiement 100&nbsp;% sécurisé</span>
+                  <span class="spb-meta">Visa · Mastercard · 3D&nbsp;Secure</span>
+                </div>
+              </div>
+              <div class="spb-badges" aria-hidden="true">
+                <span class="spb-badge"></span>
+                <span class="spb-badge spb-badge--visa">Visa</span>
+                <span class="spb-badge spb-badge--mc">Mastercard</span>
+              </div>
+            </div>
+
+            <!-- Nudge final -->
+            <div class="payment-nudge" role="note">
+              <strong>Dernière étape :</strong> vous allez être redirigé vers Stripe pour confirmer votre paiement et finaliser la réservation.
+            </div>
+
+            <!-- Bouton principal Stripe — href centralisé dans CONFIG.stripeLink -->
+            <button type="submit" class="cta-btn cta-btn--stripe js-ripple" id="submitBtn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <span id="submitBtnText">Finaliser le paiement sur Stripe</span>
+              <svg class="cta-arrow" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+
+            <p class="legal-text">
+              En cliquant, vous êtes redirigé vers Stripe pour finaliser votre paiement.
+              Aucune donnée bancaire n'est collectée ni stockée sur nos serveurs.
+              Transaction protégée par chiffrement SSL et authentification 3D&nbsp;Secure.
+              Votre commande est confirmée uniquement après validation par Stripe.
+            </p>
+
+          </div><!-- /step4 -->
+
+        </form>
+      </div><!-- /tunnel-col -->
+
+      <!-- ── SIDEBAR (desktop only) ── -->
+      <aside class="sidebar" id="sidebar" aria-label="Récapitulatif de commande">
+
+        <div class="sb-summary">
+          <div class="sb-sum-header">
+            <span class="sb-sum-kicker">Récapitulatif</span>
+          </div>
+          <div class="sb-product">
+            <div class="sb-product-icon" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            </div>
+            <div class="sb-product-info">
+              <span class="sb-prod-ref" id="sbRef" aria-live="polite">—</span>
+              <span class="sb-prod-name" id="sbName" aria-live="polite">Entrez une référence</span>
+            </div>
+          </div>
+          <div class="sb-lines">
+            <div class="sb-line"><span>Produit</span><strong id="sbAmount" aria-live="polite">—</strong></div>
+            <div class="sb-line sb-line--shipping">
+              <span>Livraison</span>
+              <div class="sb-shipping-detail">
+                <strong id="sbShipping" aria-live="polite">4,99&nbsp;€</strong>
+                <span class="sb-delivery-label" id="sbDeliveryLabel" aria-live="polite">Mondial Relay</span>
+              </div>
+            </div>
+            <div class="sb-line sb-line--total"><span>Total</span><strong id="sbTotal" aria-live="polite">—</strong></div>
+          </div>
+          <!-- Lien Stripe — href injecté par JS depuis CONFIG.stripeLink, visible au step 4 uniquement -->
+          <a id="sidebarStripeLink" class="sb-pay-cta js-ripple hidden" href="#" aria-label="Finaliser le paiement sur Stripe">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Finaliser sur Stripe
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+          <p class="sb-stripe-note">Redirection vers le paiement sécurisé Stripe</p>
+        </div>
+
+        <div class="sb-trust" role="list" aria-label="Garanties de sécurité">
+          <div class="sb-trust-item" role="listitem">
+            <span class="sti-icon" aria-hidden="true">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </span>
+            <div><strong>Paiement sécurisé</strong><span>SSL + Stripe PCI DSS</span></div>
+          </div>
+          <div class="sb-trust-item" role="listitem">
+            <span class="sti-icon" aria-hidden="true">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </span>
+            <div><strong>Email immédiat</strong><span>Confirmation dès validation Stripe</span></div>
+          </div>
+          <div class="sb-trust-item" role="listitem">
+            <span class="sti-icon" aria-hidden="true">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </span>
+            <div><strong>Traitement sous 24h</strong><span>Expédition rapide garantie</span></div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- ══ MOBILE BOTTOM BAR ═══════════════════════════════════════════ -->
+  <div class="mob-bar" id="mobileBar" role="complementary" aria-label="Barre d'action mobile">
+    <button class="mob-summary-trigger" id="mobSummaryTrigger" type="button" aria-label="Voir le récapitulatif" aria-haspopup="dialog" aria-controls="mobSummarySheet" aria-expanded="false">
+      <span class="mob-ref" id="mbbRef" aria-live="polite"></span>
+      <div class="mob-total">
+        <span class="mob-total-lbl">Total</span>
+        <span class="mob-total-val" id="mbbTotal" aria-live="polite">—</span>
+      </div>
+    </button>
+    <button class="mob-cta js-ripple" id="mbbCta" type="button" aria-label="Commander">Commander →</button>
+  </div>
+
+  <div class="mob-sheet-backdrop" id="mobSheetBackdrop" hidden></div>
+  <section class="mob-summary-sheet" id="mobSummarySheet" aria-label="Récapitulatif mobile" aria-hidden="true" hidden>
+    <div class="mob-sheet-handle" aria-hidden="true"></div>
+    <div class="mob-sheet-head">
+      <div>
+        <span class="mob-sheet-kicker">Récapitulatif</span>
+        <h3 class="mob-sheet-title">Votre commande</h3>
+      </div>
+      <button class="mob-sheet-close" id="mobSheetClose" type="button" aria-label="Fermer le récapitulatif">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <div class="mob-sheet-product">
+      <span class="mob-sheet-ref" id="mobSheetRef">—</span>
+      <span class="mob-sheet-name" id="mobSheetName">—</span>
+      <span class="mob-sheet-qty" id="mobSheetQty">×1</span>
+    </div>
+
+    <div class="mob-sheet-lines" aria-label="Détail du panier">
+      <div class="mob-sheet-line"><span>Produit</span><strong id="mobSheetAmount">—</strong></div>
+      <div class="mob-sheet-line mob-sheet-line--delivery">
+        <span>Livraison</span>
+        <div class="mob-sheet-delivery-info">
+          <strong id="mobSheetShipping">4,99&nbsp;€</strong>
+          <span class="mob-sheet-delivery-label" id="mobSheetDeliveryLabel">Mondial Relay</span>
+        </div>
+      </div>
+      <div class="mob-sheet-line mob-sheet-line--total"><span>Total</span><strong id="mobSheetTotal">—</strong></div>
+    </div>
+
+    <div class="mob-sheet-trust" aria-label="Garanties">
+      <div class="mob-sheet-trust-item">
+        <span class="mob-sheet-trust-icon" aria-hidden="true">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </span>
+        <div><strong>Paiement sécurisé</strong><span>Stripe · SSL · 3D Secure</span></div>
+      </div>
+      <div class="mob-sheet-trust-item">
+        <span class="mob-sheet-trust-icon" aria-hidden="true">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </span>
+        <div><strong>Expédition 24–48h</strong><span>Mondial Relay · Chronopost</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ PURCHASE POPUP ══════════════════════════════════════════════ -->
+  <div class="purchase-popup" id="purchasePopup" aria-live="polite" aria-atomic="true" role="status">
+    <div class="pp-avatar" aria-hidden="true">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </div>
+    <div class="pp-text">
+      <strong id="ppName">Marie D.</strong>
+      <span id="ppProduct">vient de commander QZ01</span>
+    </div>
+    <span class="pp-when" id="ppTime">à l'instant</span>
+  </div>
+
+  <!-- ══ FOOTER & SOCIAL HUB ════════════════════════════════════════ -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer-inner footer-inner--stack">
+      <section class="social-hub" aria-labelledby="socialHubTitle">
+        <div class="social-hub-head">
+          <span class="social-hub-kicker">Accès réservé · Communauté VisionHouse™</span>
+          <h2 class="social-hub-title" id="socialHubTitle">Entrez dans un circuit privé d’opportunités.</h2>
+          <p class="social-hub-sub">Chaque canal vous donne un avantage différent pour accéder aux produits avant les autres.</p>
+        </div>
+
+        <nav class="social-grid" aria-label="Accès réseaux sociaux">
+
+          <!-- ⚙ hrefs injectés par JS depuis CONFIG.social -->
+          <!-- SNAPCHAT -->
+          <a class="social-card social-card--snap" href="#"
+             target="_blank" rel="noopener noreferrer" aria-label="Rejoindre sur Snapchat — Accès aux ventes privées (ouvre un nouvel onglet)">
+            <span class="social-card-glow" aria-hidden="true"></span>
+            <span class="social-card-inner">
+              <span class="social-card-top">
+                <span class="social-card-topline">Accès exclusif</span>
+                <span class="social-card-platform-tag snap-tag">Vente privé</span>
+              </span>
+              <span class="social-card-logo-wrap" aria-hidden="true">
+                <img src="snapchat.jpeg" alt="" class="social-card-logo" loading="lazy" />
+                <span class="social-card-logo-glow" aria-hidden="true"></span>
+              </span>
+              <span class="social-card-body">
+                <span class="social-card-title">Accès Privé & Drops confidentiels</span>
+                <span class="social-card-text">Canal réservé. Accédez en avant-première aux stocks limités, ventes privées et ouvertures non publiques.
+
+Vous êtes informé en priorité, avant la mise en circulation..</span>
+              </span>
+              <span class="social-card-cta">
+                Accéder au canal privé 
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </span>
+            </span>
+          </a>
+
+          <!-- TIKTOK -->
+          <a class="social-card social-card--tiktok" href="#"
+             target="_blank" rel="noopener noreferrer" aria-label="Voir sur TikTok — Accès aux produits (ouvre un nouvel onglet)">
+            <span class="social-card-glow" aria-hidden="true"></span>
+            <span class="social-card-inner">
+              <span class="social-card-top">
+                <span class="social-card-topline">Découverte d'un quotidien opportuniste
+</span>
+                <span class="social-card-platform-tag tiktok-tag">Tendance</span>
+              </span>
+              <span class="social-card-logo-wrap" aria-hidden="true">
+                <img src="tiktok.jpeg" alt="" class="social-card-logo" loading="lazy" />
+                <span class="social-card-logo-glow" aria-hidden="true"></span>
+              </span>
+              <span class="social-card-body">
+                <span class="social-card-title">Accès Découverte</span>
+                <span class="social-card-text">Visualisez les articles en situation réelle, démonstrations et contenus qui déclenchent la décision.
+
+Regardez avant d’acheter. Comprenez ce que vous prenez.</span>
+              </span>
+              <span class="social-card-cta">
+                Accéder aux quotidiens de l'équipe
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </span>
+            </span>
+          </a>
+
+          <!-- WHATNOT -->
+          <a class="social-card social-card--whatnot" href="#"
+             target="_blank" rel="noopener noreferrer" aria-label="Rejoindre sur Whatnot — Accès enchères (ouvre un nouvel onglet)">
+            <span class="social-card-glow" aria-hidden="true"></span>
+            <span class="social-card-inner">
+              <span class="social-card-top">
+                <span class="social-card-topline">Live · Enchères temps réel</span>
+                <span class="social-card-platform-tag whatnot-tag">
+                  <span class="whatnot-live-pulse" aria-hidden="true"></span>
+                  Live
+                </span>
+              </span>
+              <span class="social-card-logo-wrap" aria-hidden="true">
+                <img src="whatnot.jpeg" alt="" class="social-card-logo" loading="lazy" />
+                <span class="social-card-logo-glow" aria-hidden="true"></span>
+              </span>
+              <span class="social-card-body">
+                <span class="social-card-title">Live & opportunités immédiates</span>
+                <span class="social-card-text">Accédez aux ventes en direct, offres limitées, Les meilleures opportunités se prennent en live, au bon moment..</span>
+              </span>
+              <span class="social-card-cta">
+                Accéder aux enchères live 
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </span>
+            </span>
+          </a>
+        </nav>
+      </section>
+
+      <div class="footer-bottomline">
+        <div class="footer-brand">
+          <span class="footer-mark" aria-hidden="true">VH</span>
+          <span>VisionHouse™</span>
+        </div>
+
+        <div class="footer-meta" role="list" aria-label="Informations légales">
+          <span role="listitem">Paiement sécurisé Stripe</span>
+          <span class="f-dot" aria-hidden="true"></span>
+          <span role="listitem">Données SSL protégées</span>
+          <span class="f-dot" aria-hidden="true"></span>
+          <span role="listitem">© 2026 VisionHouse™</span>
+        </div>
+      </div>
+
+      <!-- ── Mini réassurance footer ── -->
+      <div class="footer-reassurance" role="note" aria-label="Réassurance">
+        <span class="footer-reassurance-item">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Paiement chiffré SSL
+        </span>
+        <span class="footer-reassurance-sep" aria-hidden="true">·</span>
+        <span class="footer-reassurance-item">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          Aucune donnée bancaire stockée
+        </span>
+        <span class="footer-reassurance-sep" aria-hidden="true">·</span>
+        <span class="footer-reassurance-item">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Expédition confirmée sous 24h
+        </span>
+      </div>
+
+      <!-- ── Liens légaux ── -->
+      <nav class="footer-legal" aria-label="Liens légaux">
+        <a href="#mentions-legales" class="footer-legal-link">Mentions légales</a>
+        <span class="footer-legal-sep" aria-hidden="true">·</span>
+        <a href="#cgv" class="footer-legal-link">CGV</a>
+        <span class="footer-legal-sep" aria-hidden="true">·</span>
+        <a href="#confidentialite" class="footer-legal-link">Politique de confidentialité</a>
+        <span class="footer-legal-sep" aria-hidden="true">·</span>
+        <a href="#livraison-retours" class="footer-legal-link">Livraison &amp; retours</a>
+      </nav>
+      <p class="footer-copyright">© VisionHouse™ — Tous droits réservés</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
