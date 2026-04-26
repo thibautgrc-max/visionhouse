@@ -64,8 +64,7 @@ const CONFIG = {
      C'est l'unique endroit à modifier pour changer le lien Stripe.
      Exemple : 'https://buy.stripe.com/test_abc123xyz'
   ────────────────────────────────────────────────────────── */
-  stripeLink: https://book.stripe.com/cNi7sLe8veiR5JKgVxaR200,
-
+  stripeLink: 'https://book.stripe.com/cNi7sLe8veiR5JKgVxaR200',
   /* ⚙ FORMSPREE — Endpoint de réception des commandes
      ⚠ Doit correspondre à l'attribut action= du formulaire HTML.
      La source de vérité reste le form.action du DOM (lire ci-dessous dans le handler submit). */
