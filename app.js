@@ -73,8 +73,8 @@ const CONFIG = {
   /* ⚙ Réseaux sociaux — Remplacez avant mise en ligne */
   social: {
     snapchat: 'https://snapchat.com/t/b6h59xVV',
-    tiktok:   'https://www.tiktok.com/@vision.protocol?_r=1&_t=ZN-95WjgpOCnVG',
-    whatnot:  'https://www.whatnot.com/user/VOTRE_COMPTE_WHATNOT',
+    tiktok:   'https://www.tiktok.com/@visionhouse.fr?_r=1&_t=ZN-95t7GehXi9G',
+    whatnot:  'https://www.whatnot.com/s/vShpj5m4',
   },
 
   /* Preuve sociale live */
